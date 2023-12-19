@@ -20,8 +20,8 @@ class HMM:
     # Viterbi process
     def trans(self, strs):
 
-        # 切分
-        seq = self.bigram.dp_search(strs)
+        # Note：不需要通过代码切分，直接输入时就以空格切分好
+        seq = strs.split() #self.bigram.dp_search(strs)
 
         # smooth
         self.min_f = -3.14e+100 # 用于log平滑时所取的最小值，用于代替0
@@ -75,6 +75,7 @@ class HMM:
 
         # 对串进行回溯即可得对应拼音的汉字
         words = [None] * length
+        # 取概率最大的末尾汉字：比较的是 viterbi[length - 1][s]，但返回的是该值最大时的 s
         words[-1] = max(viterbi[length - 1], key=viterbi[length - 1].get)
 
         for n in range(length - 2, -1, -1):
